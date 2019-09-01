@@ -10,10 +10,14 @@ import {
 
 import { captureRef as takeSnapshotAsync } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
+import Svg, { Circle, Rect } from 'react-native-svg';
+
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function App() {
   const [image, setImage] = useState(null);
   const [color, setColor] = useState(Math.round(Math.random() * 1000));
+  const [color2, setColor2] = useState(Math.round(Math.random() * 1000));
 
   generatePDF = async () => {
     let snapshot = await takeSnapshotAsync(this.myView);
@@ -34,14 +38,34 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View
+      <LinearGradient
+        colors={[`#${color}`, `#${color2}`]}
         ref={component => (this.myView = component)}
-        style={{ padding: 10, backgroundColor: `#${color}` }}
+        style={{ padding: 40 }}
       >
+        <Svg height="50" width="50" viewBox="0 0 100 100">
+      <Circle
+        cx="50"
+        cy="50"
+        r="45"
+        stroke="blue"
+        strokeWidth="2.5"
+        fill="green"
+      />
+      <Rect
+        x="15"
+        y="15"
+        width="70"
+        height="70"
+        stroke="red"
+        strokeWidth="2"
+        fill="yellow"
+      />
+    </Svg>
         <Text style={{ color: "white" }}>
-          Open up App.js to start working on your app!
+          Sharing via the app...?
         </Text>
-      </View>
+      </LinearGradient>
       <Button title="Snappy snap" onPress={this.generatePDF} />
       <Button title="Share It" onPress={this.shareIt} />
       <Button
@@ -49,6 +73,7 @@ export default function App() {
         onPress={() => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
           setColor(Math.round(Math.random() * 1000));
+          setColor2(Math.round(Math.random() * 1000));
         }}
       />
       {image && (
