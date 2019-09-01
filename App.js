@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import { captureRef as takeSnapshotAsync } from "react-native-view-shot";
+import * as Sharing from "expo-sharing";
 
 export default function App() {
   const [image, setImage] = useState(null);
@@ -23,6 +24,14 @@ export default function App() {
     setImage(snapshot);
   };
 
+  shareIt = async () => {
+    let snapshot = await takeSnapshotAsync(this.myView);
+    if (snapshot.startsWith("/")) {
+      snapshot = "file://" + snapshot;
+    }
+    Sharing.shareAsync(snapshot, { UTI: "public.png" });
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -34,6 +43,7 @@ export default function App() {
         </Text>
       </View>
       <Button title="Snappy snap" onPress={this.generatePDF} />
+      <Button title="Share It" onPress={this.shareIt} />
       <Button
         title="Change Color"
         onPress={() => {
